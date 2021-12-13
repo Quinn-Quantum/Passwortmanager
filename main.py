@@ -4,26 +4,22 @@ from tkinter import *
 from tkinter.filedialog import askopenfilename
 import os
 
-
-
 # funktion zum Anzeigen der vorhandenen Passwörtr
 def passwortliste(filename):
     with open(filename) as csvdatei:
         readerCSV = csv.reader(csvdatei)
         lein = 0
         for row in readerCSV:
+            #row encoden
             row[0] = encod(row[0])
             row[1] = encod(row[1])
             row[2] = encod(row[2])
             if lein == 0:
-
                 print("%s\t%s \t%s " % (row[0], row[1], row[2]))
             else:
                 print("{row[0]:<5} {row[1]:<40} {row[2]:<20}".format (row[0],row[1] ,row[2]))
-
     time.sleep(5)
     pass
-
 
 # Funktion zum Passwort hinzufügen
 def addpasswort(g_passwortliste, filename):
@@ -47,9 +43,8 @@ def delet(g_passwortliste, filename):
         while z in range(len(g_passwortliste)):
             passname = encod(g_passwortliste[z][0])
             if  passname == name_d:
-                g_passwortliste.pop(z)
+                g_passwortliste.pop(z) #löschfunktion
             z = z + 1
-
     else:
         print("%s dafür gibt es kein Paswort" % name_d)
         time.sleep(5)
@@ -78,7 +73,7 @@ def updatepw(g_passwortliste, filename):
         while z in range(len(g_passwortliste)):
             passname = encod(g_passwortliste[z][0])
             if passname== name_u:
-                while change == True:
+                while change == True: #damit man nicht immer in diesen menü wechsel muss um was zu ändern
                     print("1 Passwort ändern")
                     print("2 Name ändern")
                     print ("3 Fertig")
@@ -90,13 +85,13 @@ def updatepw(g_passwortliste, filename):
                         it = False
                     if it:
                         auswahl = int(auswahl)
-
+                    #paswd ändern
                     if (auswahl == 1):
                         print("Altes Passwort: ")
-                        altpaswd = encod(g_passwortliste[z][2])
+                        altpaswd = encod(g_passwortliste[z][2]) #paswd encoden
                         print(altpaswd)
                         passneu = input("neues Paswort: ")
-                        while altpaswd == passneu:
+                        while altpaswd == passneu: #abgleich damit nicht das selbe benuzt wird
                             print("selbes Paswort: ")
                             print("AltesPaswort: ")
                             print(altpaswd)
@@ -104,7 +99,7 @@ def updatepw(g_passwortliste, filename):
                         passneu = decod(passneu)
                         g_passwortliste[z][2] = passneu
                         change = True
-
+                    #username ändern
                     if (auswahl == 2):
                         print("Alter Name: ")
                         altname= encod(g_passwortliste[z][1])
@@ -136,12 +131,13 @@ def db_erstellen():
     passkey = 'wow'
     nameDate = input(('Wie soll die Datei heißen: '))
     filename = nameDate + '.csv'
-    # file = open(filename, 'w', newline='')
     with open(filename, 'w', newline='') as file:
         writer = csv.writer(file)
+        #verschlüsseln des Tabellenkopfes
         name = decod('Name')
         benutzername = decod('Benutzername')
         paswd =decod('Paswd')
+        #eintragen
         writer.writerow([name, benutzername, paswd])
     print("wurde erstellt")
     time.sleep(2)
@@ -154,20 +150,17 @@ def lesendatei(filename):
     passwortliste_t = []
     with open(filename) as csvdatei:
         readerCSV = csv.reader(csvdatei)
-
         for tabelle in readerCSV:
-            # print(f' {" | ".join(tabelle)}')
             passwortliste_t += [tabelle]
-
     return passwortliste_t
 
 #codiere einen String
 def decod(text):
     codiert =""
     for zeichen in text:
-        ascii = ord(zeichen)
-        asciineu = ascii + 3
-        zeichenneu = chr(asciineu)
+        ascii = ord(zeichen) #char zu einen int
+        asciineu = ascii + 3 #verschibung um 3
+        zeichenneu = chr(asciineu) #int zu char
         codiert = "".join((codiert , zeichenneu))
     return codiert
 
@@ -184,11 +177,11 @@ def encod(text):
 # Main
 if __name__ == '__main__':
 
-    g_passwortliste = []
-    filename = ''
+    g_passwortliste = [] #liste in der die CSV gespeichert wird zum lesen und verarbeiten
+    filename = '' #welche CSV
     run = False
     start = True
-
+    #Strat des eigentlichen Programmes
     while start == True:
         print("==================")
         print(" Passwordmanage")
@@ -214,6 +207,7 @@ if __name__ == '__main__':
                 run = True
                 g_passwortliste = lesendatei(filename)
                 while run:
+                    #funktionen zum bearbeiten einer CSV
                     print("==================")
                     print(" Passwordmanage")
                     print("==================\n")
@@ -229,7 +223,6 @@ if __name__ == '__main__':
                         it_is = True
                     except ValueError:
                         it_is = False
-
                     # Eingabe Abfrage
                     if it_is:
                         eingabe = int(eingabe)
