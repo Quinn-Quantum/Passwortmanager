@@ -15,9 +15,9 @@ def passwortliste(filename):
             row[1] = encod(row[1])
             row[2] = encod(row[2])
             if lein == 0:
-                print("%s\t%s \t%s " % (row[0], row[1], row[2]))
+                print("{0:<10} {1:<20} {2:<20}".format(row[0],row[1] ,row[2]))
             else:
-                print("{row[0]:<5} {row[1]:<40} {row[2]:<20}".format (row[0],row[1] ,row[2]))
+                print("{0:<5} {1:<40} {2:<20}".format(row[0],row[1] ,row[2]))
     time.sleep(5)
     pass
 
@@ -113,7 +113,7 @@ def updatepw(g_passwortliste, filename):
                         neuname = decod(neuname)
                         g_passwortliste[z][1] = neuname
                         change = True
-                    if (auswahl == 3):
+                    else:
                         change = False
 
                 z = z + 1
@@ -176,7 +176,6 @@ def encod(text):
 
 # Main
 if __name__ == '__main__':
-
     g_passwortliste = [] #liste in der die CSV gespeichert wird zum lesen und verarbeiten
     filename = '' #welche CSV
     run = False
@@ -184,7 +183,7 @@ if __name__ == '__main__':
     #Strat des eigentlichen Programmes
     while start == True:
         print("==================")
-        print(" Passwordmanage")
+        print(" Passwordmanager")
         print("==================\n")
         print("1 Passwörter DB anlegen")
         print("2 Passwort DB auswählen")
@@ -209,7 +208,7 @@ if __name__ == '__main__':
                 while run:
                     #funktionen zum bearbeiten einer CSV
                     print("==================")
-                    print(" Passwordmanage")
+                    print(" Passwordmanager")
                     print("==================\n")
                     print("1 Passwörter anzeigen")
                     print("2 Passwort Add")
