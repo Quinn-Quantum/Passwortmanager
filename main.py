@@ -3,37 +3,39 @@ import time
 from tkinter import *
 from tkinter.filedialog import askopenfilename
 import os
-from cryptography.fernet import Fernet
+
+
 
 # funktion zum Anzeigen der vorhandenen Passwörtr
 def passwortliste(filename):
     with open(filename) as csvdatei:
         readerCSV = csv.reader(csvdatei)
-        # using the key
-        fernet = b'j6sdd8XoYCPjU1iGWZ1aQhMebEIFrfZoYV9nma9dTOM='
-        # opening the encrypted file
-        with open('nba.csv', 'rb') as enc_file:
-            encrypted = enc_file.read()
-        # decrypting the file
-        decrypted = fernet.decrypt(encrypted)
-        # opening the file in write mode and
-        # writing the decrypted data
-        with open(filename, 'wb') as dec_file:
-            dec_file.write(decrypted)
+        lein = 0
+        for row in readerCSV:
+            row[0] = encod(row[0])
+            row[1] = encod(row[1])
+            row[2] = encod(row[2])
+            if lein == 0:
+
+                print("%s\t%s \t%s " % (row[0], row[1], row[2]))
+            else:
+                print("%s\t%s \t%s "%(row[0],row[1] ,row[2]))
+
     time.sleep(5)
     pass
 
 
 # Funktion zum Passwort hinzufügen
-def addpasswort(g_passwortliste,filename):
+def addpasswort(g_passwortliste, filename):
     name = input("Für was soll das Passwort sein: ")
     b_name = input("Benutzername: ")
     passwd = input("Passwort: ")
+    #verschlüsseln
+    name = decod(name)
+    b_name = decod(b_name)
+    passwd = decod(passwd)
     g_passwortliste += [[name, b_name, passwd]]
-    with open(filename, 'wb') as filekey:
-        filekey.write(b'j6sdd8XoYCPjU1iGWZ1aQhMebEIFrfZoYV9nma9dTOM=')
-    # print(g_passwortliste)
-    savealles(g_passwortliste,filename)
+    savealles(g_passwortliste, filename)
     return g_passwortliste
 
 
@@ -43,7 +45,8 @@ def delet(g_passwortliste, filename):
     if name_d != "Name":
         z = 0
         while z in range(len(g_passwortliste)):
-            if g_passwortliste[z][0] == name_d:
+            passname = encod(g_passwortliste[z][0])
+            if  passname == name_d:
                 g_passwortliste.pop(z)
             z = z + 1
 
@@ -72,17 +75,18 @@ def updatepw(g_passwortliste, filename):
     z = 0
     if name_u != "Name":
         while z in range(len(g_passwortliste)):
-            if g_passwortliste[z][0] == name_u:
+            passname =encod(g_passwortliste[z][0])
+            if passname== name_u:
                 print("AltesPaswort: ")
-                print(g_passwortliste[z][2])
-                altpaswd = g_passwortliste[z][2]
+                altpaswd = encod(g_passwortliste[z][2])
+                print(altpaswd)
                 passneu = input("neues Paswort: ")
                 while altpaswd == passneu:
                     print("selbes Paswort: ")
                     print("AltesPaswort: ")
-                    print(g_passwortliste[z][2])
-                    altpaswd = g_passwortliste[z][2]
+                    print(altpaswd)
                     passneu = input("neues Paswort: ")
+                passneu = decod(passneu)
                 g_passwortliste[z][2] = passneu
                 z = z + 1
             else:
@@ -94,21 +98,24 @@ def updatepw(g_passwortliste, filename):
     savealles(g_passwortliste, filename)
     return g_passwortliste
 
-
+#erstelle eine Datei
 def db_erstellen():
+    passkey = 'wow'
     nameDate = input(('Wie soll die Datei heißen: '))
     filename = nameDate + '.csv'
-    #file = open(filename, 'w', newline='')
+    # file = open(filename, 'w', newline='')
     with open(filename, 'w', newline='') as file:
         writer = csv.writer(file)
-        writer.writerow(["Name","Benutzername","Paswd"])
+        name = decod('Name')
+        benutzername = decod('Benutzername')
+        paswd =decod('Paswd')
+        writer.writerow([name, benutzername, paswd])
     print("wurde erstellt")
     time.sleep(2)
     return filename
     pass
 
-
-
+#öffne eine Datei
 def lesendatei(filename):
     print(filename)
     passwortliste_t = []
@@ -121,9 +128,29 @@ def lesendatei(filename):
 
     return passwortliste_t
 
+#codiere einen String
+def decod(text):
+    codiert =""
+    for zeichen in text:
+        ascii = ord(zeichen)
+        asciineu = ascii + 3
+        zeichenneu = chr(asciineu)
+        codiert = "".join((codiert , zeichenneu))
+    return codiert
+
+#decodiere einen String
+def encod(text):
+    endcodiert = ""
+    for zeichen in text:
+        ascii = ord(zeichen)
+        asciineu = ascii - 3
+        zeichenneu = chr(asciineu)
+        endcodiert = "".join((endcodiert, zeichenneu))
+    return endcodiert
 
 # Main
 if __name__ == '__main__':
+
     g_passwortliste = []
     filename = ''
     run = False
@@ -132,10 +159,9 @@ if __name__ == '__main__':
     while start == True:
         print("==================")
         print(" Passwordmanage")
-        print("==================")
-        print("")
-        print("7 Passwörter DB anlegen")
-        print("8 Passwort DB auswählen")
+        print("==================\n")
+        print("1 Passwörter DB anlegen")
+        print("2 Passwort DB auswählen")
         print("6 Exit")
         auswahl = (input("Was möchten sie tun: "))
         try:  # abfrage ob tipp ein int ist
@@ -147,9 +173,9 @@ if __name__ == '__main__':
             auswahl = int(auswahl)
             if auswahl == 6:
                 exit()
-            if auswahl == 7:
+            if auswahl == 1:
                 db_erstellen()
-            if auswahl == 8:
+            if auswahl == 2:
                 filename = askopenfilename()
                 start = False
                 run = True
@@ -157,8 +183,7 @@ if __name__ == '__main__':
                 while run:
                     print("==================")
                     print(" Passwordmanage")
-                    print("==================")
-                    print("")
+                    print("==================\n")
                     print("1 Passwörter anzeigen")
                     print("2 Passwort Add")
                     print("3 Lösche eines Passwortes")
@@ -176,7 +201,7 @@ if __name__ == '__main__':
                     if it_is:
                         eingabe = int(eingabe)
                         if eingabe == 6:
-                            print('/n')
+                            print('\n')
                             start = True
                             run = False
                         if eingabe == 1:
