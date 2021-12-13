@@ -19,7 +19,7 @@ def passwortliste(filename):
 
                 print("%s\t%s \t%s " % (row[0], row[1], row[2]))
             else:
-                print("%s\t%s \t%s "%(row[0],row[1] ,row[2]))
+                print("{row[0]:<5} {row[1]:<40} {row[2]:<20}".format (row[0],row[1] ,row[2]))
 
     time.sleep(5)
     pass
@@ -73,21 +73,54 @@ def savealles(g_passwortliste, filename):
 def updatepw(g_passwortliste, filename):
     name_u = input("Für was möchten sie das Paswort updaten: ")
     z = 0
+    change = True
     if name_u != "Name":
         while z in range(len(g_passwortliste)):
-            passname =encod(g_passwortliste[z][0])
+            passname = encod(g_passwortliste[z][0])
             if passname== name_u:
-                print("AltesPaswort: ")
-                altpaswd = encod(g_passwortliste[z][2])
-                print(altpaswd)
-                passneu = input("neues Paswort: ")
-                while altpaswd == passneu:
-                    print("selbes Paswort: ")
-                    print("AltesPaswort: ")
-                    print(altpaswd)
-                    passneu = input("neues Paswort: ")
-                passneu = decod(passneu)
-                g_passwortliste[z][2] = passneu
+                while change == True:
+                    print("1 Passwort ändern")
+                    print("2 Name ändern")
+                    print ("3 Fertig")
+                    auswahl = (input("Was möchten sie tun: "))
+                    try:  # abfrage ob tipp ein int ist
+                        int(auswahl)
+                        it = True
+                    except ValueError:
+                        it = False
+                    if it:
+                        auswahl = int(auswahl)
+
+                    if (auswahl == 1):
+                        print("Altes Passwort: ")
+                        altpaswd = encod(g_passwortliste[z][2])
+                        print(altpaswd)
+                        passneu = input("neues Paswort: ")
+                        while altpaswd == passneu:
+                            print("selbes Paswort: ")
+                            print("AltesPaswort: ")
+                            print(altpaswd)
+                            passneu = input("neues Paswort: ")
+                        passneu = decod(passneu)
+                        g_passwortliste[z][2] = passneu
+                        change = True
+
+                    if (auswahl == 2):
+                        print("Alter Name: ")
+                        altname= encod(g_passwortliste[z][1])
+                        print(altname)
+                        neuname = input("neues Paswort: ")
+                        while altname == neuname:
+                            print("selbes Paswort: ")
+                            print("AltesPaswort: ")
+                            print(altname)
+                            neuname = input("neues Paswort: ")
+                        neuname = decod(neuname)
+                        g_passwortliste[z][1] = neuname
+                        change = True
+                    if (auswahl == 3):
+                        change = False
+
                 z = z + 1
             else:
                 z = z + 1
