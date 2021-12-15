@@ -18,7 +18,7 @@ def passwortliste(filename):
                 print("{0:<10} {1:<20} {2:<20}".format(row[0],row[1] ,row[2]))
             else:
                 print("{0:<5} {1:<40} {2:<20}".format(row[0],row[1] ,row[2]))
-    time.sleep(5)
+    time.sleep(3)
     pass
 
 # Funktion zum Passwort hinzufügen
@@ -47,7 +47,7 @@ def delet(g_passwortliste, filename):
             z = z + 1
     else:
         print("%s dafür gibt es kein Paswort" % name_d)
-        time.sleep(5)
+        time.sleep(3)
     savealles(g_passwortliste, filename)
     return g_passwortliste
 
@@ -100,7 +100,7 @@ def updatepw(g_passwortliste, filename):
                         g_passwortliste[z][2] = passneu
                         change = True
                     #username ändern
-                    if (auswahl == 2):
+                    elif (auswahl == 2):
                         print("Alter Name: ")
                         altname= encod(g_passwortliste[z][1])
                         print(altname)
@@ -121,8 +121,8 @@ def updatepw(g_passwortliste, filename):
                 z = z + 1
     else:
         print("%s dafür gibt es kein Paswort" % name_u)
-        time.sleep(5)
-    time.sleep(4)
+        time.sleep(3)
+    time.sleep(3)
     savealles(g_passwortliste, filename)
     return g_passwortliste
 
@@ -144,7 +144,7 @@ def db_erstellen():
     return filename
     pass
 
-#öffne eine Datei
+#in liste schreiben
 def lesendatei(filename):
     print(filename)
     passwortliste_t = []
