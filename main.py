@@ -25,7 +25,12 @@ def passwortliste(filename):
 def addpasswort(g_passwortliste, filename):
     name = input("Für was soll das Passwort sein: ")
     b_name = input("Benutzername: ")
-    passwd = input("Passwort: ")
+    while True:
+        passwd = input("Passwort: ")
+        if "~" in passwd or "#" in passwd or "^" in passwd or "°" in passwd:
+            print("ungültiges Passwort")
+        else:
+            break
     #verschlüsseln
     name = decod(name)
     b_name = decod(b_name)
@@ -159,8 +164,19 @@ def decod(text):
     codiert =""
     for zeichen in text:
         ascii = ord(zeichen) #char zu einen int
-        asciineu = ascii + 3 #verschibung um 3
-        zeichenneu = chr(asciineu) #int zu char
+        if ascii >=153:
+            if ascii == 253:
+                asciineu = 0
+                zeichenneu = chr(asciineu)  # int zu char
+            if ascii == 254:
+                asciineu = 1
+                zeichenneu = chr(asciineu)  # int zu char
+            if ascii == 255:
+                asciineu = 2
+                zeichenneu = chr(asciineu)  # int zu char
+        else:
+            asciineu = ascii + 3 #verschibung um 3
+            zeichenneu = chr(asciineu) #int zu char
         codiert = "".join((codiert , zeichenneu))
     return codiert
 
@@ -169,8 +185,19 @@ def encod(text):
     endcodiert = ""
     for zeichen in text:
         ascii = ord(zeichen)
-        asciineu = ascii - 3
-        zeichenneu = chr(asciineu)
+        if ascii <=2:
+            if ascii == 0:
+                asciineu = 253
+                zeichenneu = chr(asciineu)
+            if ascii == 1:
+                asciineu = 254
+                zeichenneu = chr(asciineu)
+            if ascii == 2:
+                asciineu = 255
+                zeichenneu = chr(asciineu)
+        else:
+            asciineu = ascii - 3
+            zeichenneu = chr(asciineu)
         endcodiert = "".join((endcodiert, zeichenneu))
     return endcodiert
 
