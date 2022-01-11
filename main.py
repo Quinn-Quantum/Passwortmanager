@@ -8,16 +8,12 @@ import os
 def passwortliste(filename):
     with open(filename) as csvdatei:
         readerCSV = csv.reader(csvdatei)
-        lein = 0
         for row in readerCSV:
             #row encoden
             row[0] = encod(row[0])
             row[1] = encod(row[1])
             row[2] = encod(row[2])
-            if lein == 0:
-                print("{0:<10} {1:<20} {2:<20}".format(row[0],row[1] ,row[2]))
-            else:
-                print("{0:<5} {1:<40} {2:<20}".format(row[0],row[1] ,row[2]))
+            print("{0:<20} {1:<20} {2:<20}".format(row[0],row[1] ,row[2]))
     time.sleep(3)
     pass
 
@@ -133,7 +129,6 @@ def updatepw(g_passwortliste, filename):
 
 #erstelle eine Datei
 def db_erstellen():
-    passkey = 'wow'
     nameDate = input(('Wie soll die Datei heißen: '))
     filename = nameDate + '.csv'
     with open(filename, 'w', newline='') as file:
@@ -151,7 +146,7 @@ def db_erstellen():
 
 #in liste schreiben
 def lesendatei(filename):
-    print(filename)
+    #print(filename)
     passwortliste_t = []
     with open(filename) as csvdatei:
         readerCSV = csv.reader(csvdatei)
